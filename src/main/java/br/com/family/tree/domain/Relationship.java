@@ -19,8 +19,8 @@ public class Relationship {
     private UUID id;
 
     @TargetNode
-    private Person destination;
+    private Person target;
 
-    private TypeKinship typeKinship;
+    private RelationshipType type;
 
 }

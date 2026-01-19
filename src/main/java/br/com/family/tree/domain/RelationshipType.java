@@ -1,8 +1,8 @@
 package br.com.family.tree.domain;
 
-public enum TypeKinship {
+public enum RelationshipType {
     FATHER,
     MOTHER,
     SPOUSE,
-    SON
+    CHILD
 }

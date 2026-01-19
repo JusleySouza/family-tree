@@ -24,8 +24,8 @@ public class Person {
     private String name;
 
     @NotNull
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
 
-    private LocalDate dateOfDeath;
+    private LocalDate deathDate;
 
 }
