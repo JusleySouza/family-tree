@@ -32,6 +32,10 @@ public class PersonService {
         addParent(childId, fatherId, RelationshipType.FATHER);
     }
 
+    public void addMother(UUID childId, UUID motherId) {
+        addParent(childId, motherId, RelationshipType.MOTHER);
+    }
+
 
     private void addParent(UUID childId, UUID parentId, RelationshipType type) {
         Person child = findPerson(childId);
