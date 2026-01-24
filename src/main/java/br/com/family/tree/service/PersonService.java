@@ -36,6 +36,21 @@ public class PersonService {
         addParent(childId, motherId, RelationshipType.MOTHER);
     }
 
+    public void addSpouse(UUID personAId, UUID personBId) {
+        Person personA = findPerson(personAId);
+        Person personB = findPerson(personBId);
+
+        validateNotSamePerson(personAId, personBId);
+        validateSpouseDates(personA, personB);
+        validateSpouseNotAlreadyExists(personAId, personBId);
+
+        createBidirectionalRelationship(
+                personAId,
+                personBId,
+                RelationshipType.SPOUSE
+        );
+    }
+
 
     private void addParent(UUID childId, UUID parentId, RelationshipType type) {
         Person child = findPerson(childId);
@@ -87,12 +102,37 @@ public class PersonService {
         }
     }
 
+    private void validateSpouseDates(Person a, Person b) {
+        if (a.getDeathDate() != null || b.getDeathDate() != null) {
+            throw new BusinessRuleException("Cannot create spouse relationship with deceased person");
+        }
+    }
+
+    private void validateSpouseNotAlreadyExists(UUID aId, UUID bId) {
+        boolean alreadySpouses = repository.findSpouses(aId)
+                .stream()
+                .anyMatch(p -> p.getId().equals(bId));
+
+        if (alreadySpouses) {
+            throw new BusinessRuleException("These persons are already spouses");
+        }
+    }
+
     private void createRelationship(
             UUID fromId,
             UUID toId,
             RelationshipType type
     ) {
         repository.createRelationship(fromId, toId, type.name());
+    }
+
+    private void createBidirectionalRelationship(
+            UUID personAId,
+            UUID personBId,
+            RelationshipType relationshipType
+    ) {
+        createRelationship(personAId, personBId, relationshipType);
+        createRelationship(personBId, personAId, relationshipType);
     }
 
 }
