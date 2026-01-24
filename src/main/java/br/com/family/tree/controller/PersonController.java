@@ -35,4 +35,10 @@ public class PersonController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{personAId}/spouse/{personBId}")
+    public ResponseEntity<Void> addSpouse( @PathVariable UUID personAId, @PathVariable UUID personBId) {
+        service.addSpouse(personAId, personBId);
+        return ResponseEntity.ok().build();
+    }
+
 }
