@@ -29,4 +29,10 @@ public class PersonController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{childId}/mother/{motherId}")
+    public ResponseEntity<Void> addMother( @PathVariable UUID childId, @PathVariable UUID motherId) {
+        service.addMother(childId, motherId);
+        return ResponseEntity.ok().build();
+    }
+
 }
