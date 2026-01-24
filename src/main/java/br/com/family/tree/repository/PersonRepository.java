@@ -22,6 +22,18 @@ public interface PersonRepository extends Neo4jRepository<Person, UUID> {
     List<Person> findParents(@Param("childId") UUID childId);
 
     @Query("""
+        MATCH (p:Person {id: $id})
+        RETURN p
+    """)
+    Optional<Person> findPersonById(@Param("id") UUID id);
+
+    @Query("""
+        MATCH (p:Person {id: $personId})-[:SPOUSE]->(spouse)
+        RETURN spouse
+    """)
+    List<Person> findSpouses(@Param("personId") UUID personId);
+
+    @Query("""
         MATCH (from:Person {id: $fromId}),
               (to:Person {id: $toId})
         CREATE (from)-[:${type}]->(to)
@@ -30,6 +42,16 @@ public interface PersonRepository extends Neo4jRepository<Person, UUID> {
             @Param("fromId") UUID fromId,
             @Param("toId") UUID toId,
             @Param("type") String type
+    );
+
+    @Query("""
+        MATCH (a:Person {id: $fromId}), (b:Person {id: $toId})
+        MATCH p = shortestPath((a)-[*..10]-(b))
+        RETURN length(p)
+    """)
+    Optional<Integer> findShortestPathLength(
+            @Param("fromId") UUID fromId,
+            @Param("toId") UUID toId
     );
 
 }
